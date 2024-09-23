@@ -22,6 +22,17 @@ class Product(models.Model):
         return self.name
 
 
+    @property
+    def imageURL(self) -> str:
+        """Get the URL from the image uploaded by the admin.
+        Otherwise, use the placeholder image."""
+        try:
+            url = self.image.url
+        except:
+            url = '/images/placeholder.png'
+        return url
+
+
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
