@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -9,6 +11,16 @@ class Customer(models.Model):
 
     def __str__(self) -> str:
         return self.name or ''
+
+
+@receiver(post_save, sender=User)
+def create_customer_profile(sender: User, instance: User,
+                            created: bool, **kwargs: bytes) -> Customer:
+    if created:
+        Customer.objects.create(
+            user=instance,
+            name=instance,
+            email=instance.email)
 
 
 class Product(models.Model):
