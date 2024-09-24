@@ -8,7 +8,7 @@ class Customer(models.Model):
 
 
     def __str__(self) -> str:
-        return self.name
+        return self.name or ''
 
 
 class Product(models.Model):

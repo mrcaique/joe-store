@@ -1,0 +1,11 @@
+<h3>Login</h3>
+<form method="POST" action="">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">Log In</button>
+    {% for message in messages %}
+        <p id="messages">{{message}}</p>
+    {% endfor %}
+    <div class="d-flex justify-content-center links">
+        Don't have an account? <a href="{% url 'register' %}" class="ml-2">Sign up</a>
+</form>
