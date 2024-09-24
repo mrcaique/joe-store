@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import *
@@ -8,7 +9,7 @@ from .forms import CreateUserForm
 import json
 import datetime
 
-def register(request) -> HttpResponse:
+def register(request: HttpRequest) -> HttpResponse:
     form = CreateUserForm()
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -21,7 +22,7 @@ def register(request) -> HttpResponse:
     return render(request, 'account/register.html', context)
 
 
-def loginPage(request) -> HttpResponse:
+def loginPage(request: HttpRequest) -> HttpResponse:
     form = AuthenticationForm()
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -36,12 +37,12 @@ def loginPage(request) -> HttpResponse:
     return render(request, 'account/login.html', context)
 
 
-def logoutUser(request) -> HttpResponse:
+def logoutUser(request: HttpRequest) -> HttpResponse:
     logout(request)
     return redirect('login')
 
 
-def store(request) -> HttpResponse:
+def store(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
@@ -59,7 +60,7 @@ def store(request) -> HttpResponse:
     return render(request, 'store/store.html', context)
 
 
-def cart(request) -> HttpResponse:
+def cart(request: HttpRequest) -> HttpResponse:
     """Create cart for registered user, otherwise create an
     empty cart for non-logged user"""
     if request.user.is_authenticated:
@@ -78,7 +79,7 @@ def cart(request) -> HttpResponse:
     return render(request, 'store/cart.html', context)
 
 
-def checkout(request) -> HttpResponse:
+def checkout(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
@@ -93,7 +94,7 @@ def checkout(request) -> HttpResponse:
     return render(request, 'store/checkout.html', context)
 
 
-def updateItem(request) -> JsonResponse:
+def updateItem(request: HttpRequest) -> JsonResponse:
     data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
@@ -117,7 +118,7 @@ def updateItem(request) -> JsonResponse:
     return JsonResponse('Item was added', safe=False)
 
 
-def processOrder(request) -> JsonResponse:
+def processOrder(request: HttpRequest) -> JsonResponse:
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
     if request.user.is_authenticated:
@@ -143,3 +144,11 @@ def processOrder(request) -> JsonResponse:
     else:
         print('User is not logged in')
     return JsonResponse('Payment submitted', safe=False)
+
+
+@login_required(login_url='login')
+def orderHistory(request: HttpRequest) -> HttpResponse:
+    orders = Order.objects.filter(customer=request.user.customer, complete=True).order_by('-id')
+    print(orders)
+    context = {'order_history': orders}
+    return render(request, 'store/order_history/orderhistory.html', context)

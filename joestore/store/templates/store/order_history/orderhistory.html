@@ -1,0 +1,42 @@
+<h3>Order history</h3>
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #000000;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    th {
+      background-color: #dddddd;
+    }
+</style>
+<div class="col-md-9">
+    <div class="table-responsive">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th>Order No.</th>
+                    <th>User</th>
+                    <th>Date ordered</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in order_history %}
+                <tr>
+                    <td>{{order.id}}</td>
+                    <td>{{order.customer}}</td>
+                    <td>{{order.date_ordered}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<a href="{% url 'store' %}" class="back-home">Back to home page</a>
