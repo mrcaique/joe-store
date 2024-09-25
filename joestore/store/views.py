@@ -149,6 +149,13 @@ def processOrder(request: HttpRequest) -> JsonResponse:
 @login_required(login_url='login')
 def orderHistory(request: HttpRequest) -> HttpResponse:
     orders = Order.objects.filter(customer=request.user.customer, complete=True).order_by('-id')
-    print(orders)
     context = {'order_history': orders}
     return render(request, 'store/order_history/orderhistory.html', context)
+
+
+@login_required(login_url='login')
+def orderDetails(request: HttpRequest, id: int) -> HttpResponse:
+    order = Order.objects.filter(id=id).first()
+    orderitems = OrderItem.objects.filter(order=id)
+    context = {'order': order, 'order_items': orderitems}
+    return render(request, 'store/order_history/orderdetails.html', context)

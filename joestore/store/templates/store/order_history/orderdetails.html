@@ -1,0 +1,54 @@
+<h3>Order details</h3>
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      empty-cells: show;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #000000;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #dddddd;
+    }
+</style>
+</style>
+<div class="col-md-9">
+    <div class="table-responsive">
+        <table class="table-bordered table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th:>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in order_items %}
+                <tr>
+                    <td>{{item.product}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>${{item.get_total}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="border-bottom-style: hidden; border-left-style: hidden;">&nbsp;</td>
+                    <th>Total: </th>
+                    <td>${{order.get_cart_total}}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<br>
+<a href="{% url 'store' %}" class="back-home">Back to home page</a>
+<br>
+<br>
+<a href="{% url 'order_history' %}" class="back-order-history">Back to order history</a>
