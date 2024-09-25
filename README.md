@@ -38,7 +38,7 @@ framework, and second, thanks to its DRY principles, I could write a system
 with clean and easy-to-understand code.
 
 ### Project structure
-Inside `Joe store` are two folders: `static` and `store`. The former is related
+Inside `joestore` are two folders: `static` and `store`. The former is related
 to static items, like CSS structures and images, and the latter is the store
 app itself.
 
