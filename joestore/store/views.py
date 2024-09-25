@@ -148,7 +148,8 @@ def processOrder(request: HttpRequest) -> JsonResponse:
 
 @login_required(login_url='login')
 def orderHistory(request: HttpRequest) -> HttpResponse:
-    orders = Order.objects.filter(customer=request.user.customer, complete=True).order_by('-id')
+    orders = Order.objects.filter(
+        customer=request.user.customer, complete=True).order_by('-id')
     context = {'order_history': orders}
     return render(request, 'store/order_history/orderhistory.html', context)
 
