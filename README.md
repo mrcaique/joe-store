@@ -15,17 +15,27 @@ Backend system for a simple e-commerce platform.
 7. `cd joestore/`
 8. Run the migrations:
 `poetry run python manage.py makemigrations && poetry run python manage.py migrate`
-9. Create a superuser: `poetry run python manage.py createsuperuser`
+9. Create a superuser (admin): `poetry run python manage.py createsuperuser`
 10. To run the server: `poetry run python manage.py runserver`
 11. To run the tests: `poetry run python manage.py test store`
 
-Admin dashboard can be accessed via `http://localhost:8000/admin`.
+Admin dashboard can be accessed via `http://localhost:8000/admin`.\
+The database can be accessed via command line shell using 
+```bash
+sqlite> sqlite3 db.sqlite3
+```
+In SQLite CLI, you can list all tables using `.tables`, SQL schemes can be seen
+using 
+```bash
+sqlite> .schema [table name] --indent
+```
 
 # Overview
 This project is a simple e-commerce app, with a basic front-end and back-end.
 The users can register, log in, access the store, add items to the cart, modify
 the number of items to be purchased, and make a purchase. Users also can see
-their order history. Administrators can add, edit, or remove products.
+their order history. Administrators can add, edit, or remove products via admin
+dashboard.
 
 ## Development
 Joe Store was written in Python, using [Django](https://www.djangoproject.com/)
